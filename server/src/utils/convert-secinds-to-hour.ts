@@ -7,6 +7,10 @@ export const convertSecondsToHour = (seconds: number) => {
   const hourFormattedWithTwoPoint = fillHourWithZeroInEnd
     .split("")
     .map((char, index) => {
+      if (char === ".") {
+        return "0";
+      }
+
       if (index === 2) {
         return ":";
       }
