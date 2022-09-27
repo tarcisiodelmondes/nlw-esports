@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.changeColorOfIconForWhite::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}

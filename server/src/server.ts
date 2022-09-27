@@ -81,8 +81,7 @@ app.post("/games/:id/ads", async (req, res) => {
     !discord ||
     !weekDays ||
     !hourStart ||
-    !hourEnd ||
-    !useVoiceChannel
+    !hourEnd
   ) {
     return res.status(400).json({ error: { message: "Body is invalid!" } });
   }
@@ -96,7 +95,7 @@ app.post("/games/:id/ads", async (req, res) => {
       weekDays: weekDays.join(","),
       hourStart: convertStringHourToSeconds(hourStart),
       hourEnd: convertStringHourToSeconds(hourEnd),
-      useVoiceChannel,
+      useVoiceChannel: !!useVoiceChannel,
     },
   });
 

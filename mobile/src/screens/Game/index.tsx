@@ -11,6 +11,7 @@ import { THEME } from "../../theme";
 import LogoImg from "../../assets/logo-nlw-esports.png";
 import { Heading } from "../../components/Heading";
 import { DuoCard } from "../../components/DuoCard";
+import { DuoMatch } from "../../components/DuoMatch";
 
 interface Ad {
   hourEnd: string;
@@ -29,6 +30,7 @@ export function Game() {
   const navigation = useNavigation();
 
   const [ads, setAds] = useState<Ad[]>([]);
+  const [discordDuoSelected, setDiscordDuoSelected] = useState("");
 
   useEffect(() => {
     async function fetchAds() {
@@ -46,6 +48,16 @@ export function Game() {
 
   function handleGoBack() {
     navigation.goBack();
+  }
+
+  async function getDiscordUser(adId: string) {
+    const response = await fetch(
+      `http://192.168.0.100:3333/ads/${adId}/discord`
+    );
+
+    const dataObject: Record<"discord", string> = await response.json();
+
+    setDiscordDuoSelected(dataObject.discord);
   }
 
   return (
@@ -77,7 +89,9 @@ export function Game() {
           data={ads}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
-            return <DuoCard data={item} onConnect={() => {}} />;
+            return (
+              <DuoCard data={item} onConnect={() => getDiscordUser(item.id)} />
+            );
           }}
           horizontal
           contentContainerStyle={styles.contentList}
@@ -88,6 +102,11 @@ export function Game() {
               Não hã anúncios publicados ainda...
             </Text>
           )}
+        />
+        <DuoMatch
+          visible={discordDuoSelected.length > 0}
+          discord={discordDuoSelected}
+          onClose={() => setDiscordDuoSelected("")}
         />
       </SafeAreaView>
     </Background>
